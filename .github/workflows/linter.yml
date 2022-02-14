@@ -16,6 +16,8 @@ jobs:
       - name: Run dotnet format
         id: format
         uses: xt0rted/dotnet-format@v1
+        with:
+          action: "fix"
 
       - name: Commit files
         if: steps.format.outputs.has-changes == 'true'
