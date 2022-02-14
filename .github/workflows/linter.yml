@@ -13,6 +13,10 @@ jobs:
       - name: Dotnet Format
         id: format
         run: dotnet format
+      - name: check
+        run: ls -al
+      - name: git 
+        run: git status
       - name: Commit files
         if: steps.format.outputs.has-changes == 'true'
         run: |
