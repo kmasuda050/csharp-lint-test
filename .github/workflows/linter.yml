@@ -1,7 +1,5 @@
 name: Format on slash command
-on:
-  issue_comment:
-    types: created
+on: pull_request
 jobs:
   dotnet-format:
     runs-on: ubuntu-latest
