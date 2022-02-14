@@ -1,33 +1,26 @@
 name: Format check on pull request
 on: pull_request
 jobs:
-  dotnet-format:
+  lint_csharp:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Add dotnet-format problem matcher
-        uses: xt0rted/dotnet-format-problem-matcher@v1
-
-      - name: Restore dotnet tools
-        uses: xt0rted/dotnet-tool-restore@v1
-
-      - name: Run dotnet format
-        id: format
-        uses: xt0rted/dotnet-format@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
         with:
-          action: "fix"
-
+          dotnet-version: 6.0.x
+      - name: Dotnet Format
+        run: dotnet format
+      - name: Check for modified files
+        id: git-check
+        run: echo "::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)"
       - name: Commit files
-        if: steps.format.outputs.has-changes == 'true'
+        if: steps.git-check.outputs.has-changes == 'true'
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -a -m 'Automated dotnet-format update'
-
       - name: Push changes
-        if: steps.format.outputs.has-changes == 'true'
+        if: steps.git-check.outputs.has-changes == 'true'
         uses: ad-m/github-push-action@v0.5.0
         with:
           branch: ${{ github.head_ref }}
