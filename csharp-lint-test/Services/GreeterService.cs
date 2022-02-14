@@ -1,3 +1,7 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using csharp_lint_test;
 using Grpc.Core;
 
@@ -13,7 +17,7 @@ namespace csharp_lint_test.Services
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
-            _logger.LogInformation( "message" )  ;
+            _logger.LogInformation("message");
             return Task.FromResult(new HelloReply
             {
                 Message = "Hello " + request.Name
